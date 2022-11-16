@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState } from "react"
+import Header from "./component/Header"
+import "./App.css"
+import Tasks from "./component/Tasks"
+import AddTask from "./component/AddTask"
 function App() {
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.reminder === false))
+  }
+  const [tasks, setTasks] = useState([])
+  const toggleReminder = (id) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, reminder: !task.reminder } : task
+      )
+    )
+  }
+  const addTask = (task) => {
+    setTasks([...tasks, task])
+  }
+  const completedTasks = (id) => {
+    setTasks(tasks.filter(({ reminder }) => reminder))
+  }
+  const ActiveTasks = (id) => {
+    setTasks(tasks.filter((task) => task.reminder === false))
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <div className="background-img">
+        <img src="./image/bg-desktop-dark.jpg" alt="personal" />
+      </div>
+      <div className="container">
+        <Header />
+        <AddTask onAdd={addTask} />
+        <Tasks
+          tasks={tasks}
+          onDelete={deleteTask}
+          onToggle={toggleReminder}
+          onCompleted={completedTasks}
+          onActive={ActiveTasks}
+        />
+      </div>
+    </>
+  )
 }
-
-export default App;
+export default App
